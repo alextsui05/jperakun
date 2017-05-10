@@ -63,7 +63,7 @@ var ppcMain = {
   _onTabSelect: function(tabId) {
 
     if ((this.enabled == 1))
-      chrome.tabs.sendRequest(tabId, {"type":"enable", "config":ppcMain.config});
+      browser.tabs.sendRequest(tabId, {"type":"enable", "config":ppcMain.config});
   },
 
   miniHelp:
@@ -87,15 +87,15 @@ var ppcMain = {
     }
 
     // Send message to current tab to add listeners and create stuff
-    chrome.tabs.sendRequest(tab.id, {"type":"enable", "config":ppcMain.config});
+    browser.tabs.sendRequest(tab.id, {"type":"enable", "config":ppcMain.config});
     this.enabled = 1;
 
     if(mode == 1) {
-      chrome.tabs.sendRequest(tab.id, {"type":"showPopup", "text":ppcMain.miniHelp});
+      browser.tabs.sendRequest(tab.id, {"type":"showPopup", "text":ppcMain.miniHelp});
     }
-    chrome.browserAction.setIcon({"path":"images/toolbar-enabled.png"});
-    // chrome.browserAction.setBadgeBackgroundColor({"color":[255,0,0,255]});
-    // chrome.browserAction.setBadgeText({"text":"On"});
+    browser.browserAction.setIcon({"path":"images/toolbar-enabled.png"});
+    // browser.browserAction.setBadgeBackgroundColor({"color":[255,0,0,255]});
+    // browser.browserAction.setBadgeText({"text":"On"});
   },
 
   // This function diables
@@ -104,17 +104,17 @@ var ppcMain = {
     delete this.dict;
 
     this.enabled = 0;
-    chrome.browserAction.setIcon({"path":"images/toolbar-disabled.png"});
-    // chrome.browserAction.setBadgeBackgroundColor({"color":[0,0,0,0]});
-    // chrome.browserAction.setBadgeText({"text":""});
+    browser.browserAction.setIcon({"path":"images/toolbar-disabled.png"});
+    // browser.browserAction.setBadgeBackgroundColor({"color":[0,0,0,0]});
+    // browser.browserAction.setBadgeText({"text":""});
 
     // Send a disable message to all browsers
-    var windows = chrome.windows.getAll({"populate":true},
+    var windows = browser.windows.getAll({"populate":true},
       function(windows) {
         for (var i =0; i < windows.length; ++i) {
           var tabs = windows[i].tabs;
           for ( var j = 0; j < tabs.length; ++j) {
-            chrome.tabs.sendRequest(tabs[j].id, {"type":"disable"});
+            browser.tabs.sendRequest(tabs[j].id, {"type":"disable"});
           }
         }
       });

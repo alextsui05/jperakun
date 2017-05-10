@@ -65,8 +65,8 @@ ppcDict.prototype = {
   },
 
   loadDictionary: function() {
-    this.wordDict = this.fileRead(chrome.extension.getURL("data/dict.dat"));
-    this.wordIndex = this.fileRead(chrome.extension.getURL("data/dict.idx"));
+    this.wordDict = this.fileRead(browser.extension.getURL("data/dict.dat"));
+    this.wordIndex = this.fileRead(browser.extension.getURL("data/dict.idx"));
   },
 
   getUniqueArray: function(arr) {

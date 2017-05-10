@@ -96,7 +96,7 @@ var ppcContent = {
       css.setAttribute('rel', 'stylesheet');
       css.setAttribute('type', 'text/css');
       var cssdoc = window.cperapera.config.css;
-      css.setAttribute('href', chrome.extension.getURL('css/popup-' +
+      css.setAttribute('href', browser.extension.getURL('css/popup-' +
                                 cssdoc + '.css'));
       css.setAttribute('id', 'cperapera-css');
       topdoc.getElementsByTagName('head')[0].appendChild(css);
@@ -531,7 +531,7 @@ var ppcContent = {
 
     lastSelEnd = selEndList;
     lastRo = ro;
-    chrome.extension.sendRequest({"type":"xsearch", "text":text, "showmode":this.showMode},
+    browser.extension.sendRequest({"type":"xsearch", "text":text, "showmode":this.showMode},
     ppcContent.processEntry);
 
     return 1;
@@ -573,7 +573,7 @@ var ppcContent = {
       tdata.prevSelView = doc.defaultView;
     }
 
-    chrome.extension.sendRequest({"type":"makehtml", "entry":e}, ppcContent.processHtml);
+    browser.extension.sendRequest({"type":"makehtml", "entry":e}, ppcContent.processHtml);
   },
 
   processHtml: function(html) {
@@ -607,7 +607,7 @@ var ppcContent = {
   },
 
   showTitle: function(tdata) {
-    chrome.extension.sendRequest({"type":"translate", "title":tdata.title},
+    browser.extension.sendRequest({"type":"translate", "title":tdata.title},
       ppcContent.processTitle);
   },
 
@@ -624,7 +624,7 @@ var ppcContent = {
 
     this.lastFound = [e];
 
-    chrome.extension.sendRequest({"type":"makehtml", "entry":e}, ppcContent.processHtml);
+    browser.extension.sendRequest({"type":"makehtml", "entry":e}, ppcContent.processHtml);
   },
 
   getFirstTextChild: function(node) {
@@ -764,7 +764,7 @@ var ppcContent = {
 }
 
 //Event Listeners
-chrome.extension.onRequest.addListener(
+browser.extension.onRequest.addListener(
   function(request, sender, sendResponse) {
     switch(request.type) {
       case 'enable':
@@ -787,4 +787,4 @@ chrome.extension.onRequest.addListener(
 );
 
 // When a page first loads, checks to see if it should enable script
-chrome.extension.sendRequest({"type":"enable?"});
+browser.extension.sendRequest({"type":"enable?"});
