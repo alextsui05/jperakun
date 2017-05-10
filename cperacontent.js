@@ -531,7 +531,7 @@ var ppcContent = {
 
     lastSelEnd = selEndList;
     lastRo = ro;
-    browser.extension.sendRequest({"type":"xsearch", "text":text, "showmode":this.showMode},
+    browser.runtime.sendMessage({"type":"xsearch", "text":text, "showmode":this.showMode},
     ppcContent.processEntry);
 
     return 1;
@@ -573,7 +573,7 @@ var ppcContent = {
       tdata.prevSelView = doc.defaultView;
     }
 
-    browser.extension.sendRequest({"type":"makehtml", "entry":e}, ppcContent.processHtml);
+    browser.runtime.sendMessage({"type":"makehtml", "entry":e}, ppcContent.processHtml);
   },
 
   processHtml: function(html) {
@@ -607,7 +607,7 @@ var ppcContent = {
   },
 
   showTitle: function(tdata) {
-    browser.extension.sendRequest({"type":"translate", "title":tdata.title},
+    browser.runtime.sendMessage({"type":"translate", "title":tdata.title},
       ppcContent.processTitle);
   },
 
@@ -624,7 +624,7 @@ var ppcContent = {
 
     this.lastFound = [e];
 
-    browser.extension.sendRequest({"type":"makehtml", "entry":e}, ppcContent.processHtml);
+    browser.runtime.sendMessage({"type":"makehtml", "entry":e}, ppcContent.processHtml);
   },
 
   getFirstTextChild: function(node) {
@@ -764,7 +764,7 @@ var ppcContent = {
 }
 
 //Event Listeners
-browser.extension.onRequest.addListener(
+browser.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     switch(request.type) {
       case 'enable':
@@ -787,4 +787,4 @@ browser.extension.onRequest.addListener(
 );
 
 // When a page first loads, checks to see if it should enable script
-browser.extension.sendRequest({"type":"enable?"});
+browser.runtime.sendMessage({"type":"enable?"});

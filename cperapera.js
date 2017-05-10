@@ -63,7 +63,7 @@ var ppcMain = {
   _onTabSelect: function(tabId) {
 
     if ((this.enabled == 1))
-      browser.tabs.sendRequest(tabId, {"type":"enable", "config":ppcMain.config});
+      browser.tabs.sendMessage(tabId, {"type":"enable", "config":ppcMain.config});
   },
 
   miniHelp:
@@ -87,11 +87,11 @@ var ppcMain = {
     }
 
     // Send message to current tab to add listeners and create stuff
-    browser.tabs.sendRequest(tab.id, {"type":"enable", "config":ppcMain.config});
+    browser.tabs.sendMessage(tab.id, {"type":"enable", "config":ppcMain.config});
     this.enabled = 1;
 
     if(mode == 1) {
-      browser.tabs.sendRequest(tab.id, {"type":"showPopup", "text":ppcMain.miniHelp});
+      browser.tabs.sendMessage(tab.id, {"type":"showPopup", "text":ppcMain.miniHelp});
     }
     browser.browserAction.setIcon({"path":"images/toolbar-enabled.png"});
     // browser.browserAction.setBadgeBackgroundColor({"color":[255,0,0,255]});
@@ -114,7 +114,7 @@ var ppcMain = {
         for (var i =0; i < windows.length; ++i) {
           var tabs = windows[i].tabs;
           for ( var j = 0; j < tabs.length; ++j) {
-            browser.tabs.sendRequest(tabs[j].id, {"type":"disable"});
+            browser.tabs.sendMessage(tabs[j].id, {"type":"disable"});
           }
         }
       });
