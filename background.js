@@ -1,5 +1,5 @@
 browser.browserAction.onClicked.addListener(ppcMain.inlineToggle);
-browser.tabs.onSelectionChanged.addListener(ppcMain.onTabSelect);
+browser.tabs.onActivated.addListener(ppcMain.onTabSelect);
 browser.runtime.onMessage.addListener(
   function(request, sender, response) {
     switch(request.type) {
