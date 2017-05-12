@@ -9,7 +9,7 @@
    "content_scripts": [ {
       "all_frames": true,
       "js": [ "common.js", "cperacontent.js" ],
-      "matches": [ "\u003Call_urls>" ]
+      "matches": [ "<all_urls>" ]
    } ],
    "description": "Put your mouse over any Chinese words on a webpage and it gives you the pronunciation and definition. Simple as that!",
    "icons": {
