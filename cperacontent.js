@@ -633,11 +633,22 @@ var ppcContent = {
       //
   },
 
+  getRange: function(ev) {
+    if (document.caretRangeFromPoint)
+      return document.caretRangeFromPoint(ev.clientX, ev.clientY);
+    else if (ev.rangeParent) {
+      var r = document.createRange();
+      r.setStart(ev.rangeParent, ev.rangeOffset);
+      return r;
+    }
+    return null;
+  },
+
   onMouseMove: function(ev) { ppcContent._onMouseMove(ev); },
   _onMouseMove: function(ev) {
     var tdata = window.cperapera;  // per-tab data
 
-    var range = document.caretRangeFromPoint(ev.clientX, ev.clientY);
+    var range = this.getRange(ev);
     var rp = range.startContainer;
     var ro = range.startOffset;
 
