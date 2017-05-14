@@ -12,6 +12,11 @@ browser.runtime.onMessage.addListener(
         var e = ppcMain.search(request.text, request.showmode);
         response(e);
         break;
+      case 'jsearch':
+        console.log('jsearch');
+        var e = ppcMain.jsearch(request.text);
+        response(e);
+        break;
       case 'translate':
         console.log('translate');
         var e = ppcMain.dict.translate(request.title);

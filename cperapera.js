@@ -145,6 +145,28 @@ var ppcMain = {
     } while (showMode != m);
 
     return e;
+  },
+
+  jsearch: function(text) {
+    //leaving this shit in here for the future if i wanna do a hanzi dict
+    var showMode = 0;
+    var m = showMode;
+    var e = null;
+
+    do {
+      switch (showMode) {
+      case 0:
+        e = this.dict.wordSearchJP(text);
+        break;
+      //case this.hanziN:
+        //e = this.dict.kanjiSearch(text.charAt(0));
+//        break;
+      }
+      if (e) break;
+      showMode = (showMode + 1) % this.dictCount;
+    } while (showMode != m);
+
+    return e;
   }
 };
 

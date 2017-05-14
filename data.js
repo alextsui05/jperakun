@@ -38,8 +38,416 @@
   when modifying any of the files. - Jon
 
 */
+var Deinflector = function() {
+  this.reasons = [];
+  this.rules = [];
+
+  var buffer = [
+    "Deinflect Rules 20081220-0509 | by Jonathan Zarate | http://www.polarcloud.com",
+    "polite past negative",
+    "polite negative",
+    "polite volitional",
+    "-chau",
+    "-sugiru",
+    "-nasai",
+    "polite past",
+    "-tara",
+    "-tari",
+    "causative",
+    "potential or passive",
+    "-sou",
+    "-tai",
+    "polite",
+    "past",
+    "negative",
+    "passive",
+    "-ba",
+    "volitional",
+    "potential",
+    "passive or causative",
+    "-te",
+    "-zu",
+    "imperative",
+    "masu stem",
+    "adv",
+    "noun",
+    "imperative negative",
+    "くありませんでした	い	1152	0",
+    "いませんでした	う	640	0",
+    "きませんでした	く	640	0",
+    "きませんでした	くる	2176	0",
+    "ぎませんでした	ぐ	640	0",
+    "しませんでした	す	640	0",
+    "しませんでした	する	4224	0",
+    "ちませんでした	つ	640	0",
+    "にませんでした	ぬ	640	0",
+    "びませんでした	ぶ	640	0",
+    "みませんでした	む	640	0",
+    "りませんでした	る	640	0",
+    "くありません	い	1152	1",
+    "ませんでした	る	2432	0",
+    "いましょう	う	640	2",
+    "きましょう	く	640	2",
+    "きましょう	くる	2176	2",
+    "ぎましょう	ぐ	640	2",
+    "しましょう	す	640	2",
+    "しましょう	する	4224	2",
+    "ちましょう	つ	640	2",
+    "にましょう	ぬ	640	2",
+    "びましょう	ぶ	640	2",
+    "みましょう	む	640	2",
+    "りましょう	る	640	2",
+    "いじゃう	ぐ	514	3",
+    "いすぎる	う	513	4",
+    "いちゃう	く	514	3",
+    "いなさい	う	640	5",
+    "いました	う	640	6",
+    "いません	う	640	1",
+    "かったら	い	1152	7",
+    "かったり	い	1152	8",
+    "きすぎる	く	513	4",
+    "きすぎる	くる	2049	4",
+    "ぎすぎる	ぐ	513	4",
+    "きちゃう	くる	2050	3",
+    "きなさい	く	640	5",
+    "きなさい	くる	2176	5",
+    "ぎなさい	ぐ	640	5",
+    "きました	く	640	6",
+    "きました	くる	2176	6",
+    "ぎました	ぐ	640	6",
+    "きません	く	640	1",
+    "きません	くる	2176	1",
+    "ぎません	ぐ	640	1",
+    "こさせる	くる	2049	9",
+    "こられる	くる	2049	10",
+    "しすぎる	す	513	4",
+    "しすぎる	する	4097	4",
+    "しちゃう	す	514	3",
+    "しちゃう	する	4098	3",
+    "しなさい	す	640	5",
+    "しなさい	する	4224	5",
+    "しました	す	640	6",
+    "しました	する	4224	6",
+    "しません	す	640	1",
+    "しません	する	4224	1",
+    "ちすぎる	つ	513	4",
+    "ちなさい	つ	640	5",
+    "ちました	つ	640	6",
+    "ちません	つ	640	1",
+    "っちゃう	う	514	3",
+    "っちゃう	く	514	3",
+    "っちゃう	つ	514	3",
+    "っちゃう	る	514	3",
+    "にすぎる	ぬ	513	4",
+    "になさい	ぬ	640	5",
+    "にました	ぬ	640	6",
+    "にません	ぬ	640	1",
+    "びすぎる	ぶ	513	4",
+    "びなさい	ぶ	640	5",
+    "びました	ぶ	640	6",
+    "びません	ぶ	640	1",
+    "ましょう	る	2432	2",
+    "みすぎる	む	513	4",
+    "みなさい	む	640	5",
+    "みました	む	640	6",
+    "みません	む	640	1",
+    "りすぎる	る	513	4",
+    "りなさい	る	640	5",
+    "りました	る	640	6",
+    "りません	る	640	1",
+    "んじゃう	ぬ	514	3",
+    "んじゃう	ぶ	514	3",
+    "んじゃう	む	514	3",
+    "いそう	う	640	11",
+    "いたい	う	516	12",
+    "いたら	く	640	7",
+    "いだら	ぐ	640	7",
+    "いたり	く	640	8",
+    "いだり	ぐ	640	8",
+    "います	う	640	13",
+    "かせる	く	513	9",
+    "がせる	ぐ	513	9",
+    "かった	い	1152	14",
+    "かない	く	516	15",
+    "がない	ぐ	516	15",
+    "かれる	く	513	16",
+    "がれる	ぐ	513	16",
+    "きそう	く	640	11",
+    "きそう	くる	2176	11",
+    "ぎそう	ぐ	640	11",
+    "きたい	く	516	12",
+    "きたい	くる	2052	12",
+    "ぎたい	ぐ	516	12",
+    "きたら	くる	2176	7",
+    "きたり	くる	2176	8",
+    "きます	く	640	13",
+    "きます	くる	2176	13",
+    "ぎます	ぐ	640	13",
+    "くない	い	1028	15",
+    "ければ	い	1152	17",
+    "こない	くる	2052	15",
+    "こよう	くる	2176	18",
+    "これる	くる	2049	19",
+    "させる	する	4097	9",
+    "させる	る	2305	9",
+    "さない	す	516	15",
+    "される	す	513	20",
+    "される	する	4097	16",
+    "しそう	す	640	11",
+    "しそう	する	4224	11",
+    "したい	す	516	12",
+    "したい	する	4100	12",
+    "したら	す	640	7",
+    "したら	する	4224	7",
+    "したり	す	640	8",
+    "したり	する	4224	8",
+    "しない	する	4100	15",
+    "します	す	640	13",
+    "します	する	4224	13",
+    "しよう	する	4224	18",
+    "すぎる	い	1025	4",
+    "すぎる	る	2305	4",
+    "たせる	つ	513	9",
+    "たない	つ	516	15",
+    "たれる	つ	513	16",
+    "ちそう	つ	640	11",
+    "ちたい	つ	516	12",
+    "ちます	つ	640	13",
+    "ちゃう	る	2306	3",
+    "ったら	う	640	7",
+    "ったら	つ	640	7",
+    "ったら	る	640	7",
+    "ったり	う	640	8",
+    "ったり	つ	640	8",
+    "ったり	る	640	8",
+    "なさい	る	2432	5",
+    "なせる	ぬ	513	9",
+    "なない	ぬ	516	15",
+    "なれる	ぬ	513	16",
+    "にそう	ぬ	640	11",
+    "にたい	ぬ	516	12",
+    "にます	ぬ	640	13",
+    "ばせる	ぶ	513	9",
+    "ばない	ぶ	516	15",
+    "ばれる	ぶ	513	16",
+    "びそう	ぶ	640	11",
+    "びたい	ぶ	516	12",
+    "びます	ぶ	640	13",
+    "ました	る	2432	6",
+    "ませる	む	513	9",
+    "ません	る	2432	1",
+    "まない	む	516	15",
+    "まれる	む	513	16",
+    "みそう	む	640	11",
+    "みたい	む	516	12",
+    "みます	む	640	13",
+    "らせる	る	513	9",
+    "らない	る	516	15",
+    "られる	る	2817	10",
+    "りそう	る	640	11",
+    "りたい	る	516	12",
+    "ります	る	640	13",
+    "わせる	う	513	9",
+    "わない	う	516	15",
+    "われる	う	513	16",
+    "んだら	ぬ	640	7",
+    "んだら	ぶ	640	7",
+    "んだら	む	640	7",
+    "んだり	ぬ	640	8",
+    "んだり	ぶ	640	8",
+    "んだり	む	640	8",
+    "いた	く	640	14",
+    "いだ	ぐ	640	14",
+    "いて	く	640	21",
+    "いで	ぐ	640	21",
+    "えば	う	640	17",
+    "える	う	513	19",
+    "おう	う	640	18",
+    "かず	く	640	22",
+    "がず	ぐ	640	22",
+    "きた	くる	2176	14",
+    "きて	くる	2176	21",
+    "くて	い	1152	21",
+    "けば	く	640	17",
+    "げば	ぐ	640	17",
+    "ける	く	513	19",
+    "げる	ぐ	513	19",
+    "こい	くる	2176	23",
+    "こう	く	640	18",
+    "ごう	ぐ	640	18",
+    "こず	くる	2176	22",
+    "さず	す	640	22",
+    "した	す	640	14",
+    "した	する	4224	14",
+    "して	す	640	21",
+    "して	する	4224	21",
+    "しろ	する	4224	23",
+    "せず	する	4224	22",
+    "せば	す	640	17",
+    "せよ	する	4224	23",
+    "せる	す	513	19",
+    "そう	い	1152	11",
+    "そう	す	640	18",
+    "そう	る	2432	11",
+    "たい	る	2308	12",
+    "たず	つ	640	22",
+    "たら	る	2432	7",
+    "たり	る	2432	8",
+    "った	う	640	14",
+    "った	く	640	14",
+    "った	つ	640	14",
+    "った	る	640	14",
+    "って	う	640	21",
+    "って	く	640	21",
+    "って	つ	640	21",
+    "って	る	640	21",
+    "てば	つ	640	17",
+    "てる	つ	513	19",
+    "とう	つ	640	18",
+    "ない	る	2308	15",
+    "なず	ぬ	640	22",
+    "ねば	ぬ	640	17",
+    "ねる	ぬ	513	19",
+    "のう	ぬ	640	18",
+    "ばず	ぶ	640	22",
+    "べば	ぶ	640	17",
+    "べる	ぶ	513	19",
+    "ぼう	ぶ	640	18",
+    "ます	る	2432	13",
+    "まず	む	640	22",
+    "めば	む	640	17",
+    "める	む	513	19",
+    "もう	む	640	18",
+    "よう	る	2432	18",
+    "らず	る	640	22",
+    "れば	る	7040	17",
+    "れる	る	2817	19",
+    "ろう	る	640	18",
+    "わず	う	640	22",
+    "んだ	ぬ	640	14",
+    "んだ	ぶ	640	14",
+    "んだ	む	640	14",
+    "んで	ぬ	640	21",
+    "んで	ぶ	640	21",
+    "んで	む	640	21",
+    "い	いる	384	24",
+    "い	う	640	24",
+    "い	る	2176	23",
+    "え	う	640	23",
+    "え	える	384	24",
+    "き	きる	384	24",
+    "き	く	640	24",
+    "ぎ	ぎる	384	24",
+    "ぎ	ぐ	640	24",
+    "く	い	1152	25",
+    "け	く	640	23",
+    "け	ける	384	24",
+    "げ	ぐ	640	23",
+    "げ	げる	384	24",
+    "さ	い	1152	26",
+    "し	す	640	24",
+    "じ	じる	384	24",
+    "ず	る	2432	22",
+    "せ	す	640	23",
+    "せ	せる	384	24",
+    "ぜ	ぜる	384	24",
+    "た	る	2432	14",
+    "ち	ちる	384	24",
+    "ち	つ	640	24",
+    "て	つ	640	23",
+    "て	てる	384	24",
+    "て	る	2432	21",
+    "で	でる	384	24",
+    "な		7040	27",
+    "に	にる	384	24",
+    "に	ぬ	640	24",
+    "ね	ぬ	640	23",
+    "ね	ねる	384	24",
+    "ひ	ひる	384	24",
+    "び	びる	384	24",
+    "び	ぶ	640	24",
+    "へ	へる	384	24",
+    "べ	ぶ	640	23",
+    "べ	べる	384	24",
+    "み	みる	384	24",
+    "み	む	640	24",
+    "め	む	640	23",
+    "め	める	384	24",
+    "よ	る	384	23",
+    "り	りる	384	24",
+    "り	る	640	24",
+    "れ	る	640	23",
+    "れ	れる	384	24",
+    "ろ	る	384	23"
+  ];
+  var ruleGroup = [];
+  ruleGroup.fromLen = -1;
+
+  // i = 1: skip header
+  for (var i = 1; i < buffer.length; ++i) {
+    var f = buffer[i].split('\t');
+
+    if (f.length == 1) {
+      this.reasons.push(f[0]);
+    }
+    else if (f.length == 4) {
+      var r = { from: f[0], to: f[1], type: f[2], reason: f[3] };
+      if (ruleGroup.fromLen != r.from.length) {
+        ruleGroup = [];
+        ruleGroup.fromLen = r.from.length;
+        this.rules.push(ruleGroup);
+      }
+      ruleGroup.push(r);
+    }
+  }
+};
+
+Deinflector.prototype = {
+  go: function(word) {
+    var have = [];
+    have[word] = 0;
+
+    var r = [{ word: word, type: 0xFF, reason: '' }];
+    var i = 0;
+    do {
+      word = r[i].word;
+      var wordLen = word.length;
+      var type = r[i].type;
+
+      for (var j = 0; j < this.rules.length; ++j) {
+        var ruleGroup = this.rules[j];
+        if (ruleGroup.fromLen <= wordLen) {
+          var end = word.substr(-ruleGroup.fromLen);
+          for (var k = 0; k < ruleGroup.length; ++k) {
+            var rule = ruleGroup[k];
+            if ((type & rule.type) && (end == rule.from)) {
+              var newWord = word.substr(0, word.length - rule.from.length) + rule.to;
+              if (newWord.length <= 1) continue;
+              var o = {};
+              if (have[newWord] != undefined) {
+                o = r[have[newWord]];
+                o.type |= (rule.type >> 8);
+                continue;
+              }
+              have[newWord] = r.length;
+              if (r[i].reason.length) o.reason = this.reasons[rule.reason] + ' &lt; ' + r[i].reason;
+              else o.reason = this.reasons[rule.reason];
+              o.type = rule.type >> 8;
+              o.word = newWord;
+              r.push(o);
+            }
+          }
+        }
+      }
+    } while (++i < r.length);
+
+    return r;
+  }
+}
+
 function ppcDict() {
   this.loadDictionary();
+  this.deinflector = new Deinflector();
 }
 
 ppcDict.prototype = {
@@ -67,6 +475,10 @@ ppcDict.prototype = {
   loadDictionary: function() {
     this.wordDict = this.fileRead(browser.extension.getURL("data/dict.dat"));
     this.wordIndex = this.fileRead(browser.extension.getURL("data/dict.idx"));
+
+    this.edict = this.fileRead(browser.extension.getURL("data/edict.dat"));
+    this.kanaIndex = this.fileRead(browser.extension.getURL("data/kana.idx"));
+    this.kanjiIndex = this.fileRead(browser.extension.getURL("data/kanji.idx"));
   },
 
   getUniqueArray: function(arr) {
@@ -115,6 +527,26 @@ ppcDict.prototype = {
     return this.getUniqueArray(results).sort();
   },
 
+  indexSearch2: function (book, word) {
+    var hit, k, start, end;
+    var results = [];
+    var indexString;
+    var indexsep = "\uFF1A";
+
+    //find all hits
+    hit = book.indexOf( "\n" + word + indexsep);
+    while (hit != -1 && results.length < 10) {
+      start = book.indexOf(indexsep, hit) + 1;
+      end = book.indexOf("\n", start);
+      indexString = book.substr(start, end - start);
+      results.push(parseInt(indexString));
+
+      hit = book.indexOf( "\n" + word + indexsep, hit+1);
+    }
+
+    return this.getUniqueArray(results).sort();
+  },
+
   wordSearch: function (word) {
     var i;
 
@@ -145,6 +577,43 @@ ppcDict.prototype = {
     }
     return entryobj;
     },
+
+  wordSearchJP: function (word) {
+    var i;
+
+    console.log("TODO: deinflect " + word + " and lookup candidates");
+    var entryobj = {};
+    entryobj.data = [];
+
+    var rawentries = [];
+    // TODO: do lookups with respect to japanese dictionary
+    while (word.length > 0) {
+      //hits = start of the lines in the dict where the entries are
+      var hits1 = this.indexSearch2(this.kanaIndex, word);
+      var hits2 = this.indexSearch2(this.kanjiIndex, word);
+      var hits = this.getUniqueArray(hits1.concat(hits2));
+
+      for (i = 0; i < hits.length; i++) {
+        var end = this.edict.indexOf("\n", hits[i]);
+        var entryline = this.edict.substr(hits[i], end - hits[i]);
+        rawentries.push(entryline);
+        console.log(entryline);
+      }
+      word = word.substr(0, word.length - 1);
+    }
+
+    entryobj.matchLen = 0;
+    for (i = 0; i < rawentries.length; i++) {
+      //set highlight length to longest match
+      var hanziLen = rawentries[i].indexOf(" ");
+      if (hanziLen > entryobj.matchLen)
+        entryobj.matchLen = hanziLen;
+
+      entryobj.data.push([rawentries[i], null]);
+    }
+
+    return entryobj;
+  },
 
   parseCEdictLine: function (entry) {
     var space1 = entry.indexOf(" ");
@@ -182,9 +651,12 @@ ppcDict.prototype = {
       e = entry.data[i][0].match(/^(.+?)\s+(?:\[(.*?)\])?\s*\/(.+)\//);
       if (!e) continue;
 
-      trad = e[1].split(" ")[0];
-      simp = e[1].split(" ")[1];
-      pinyin = this.parsePinyin(e[2]);
+      //trad = e[1].split(" ")[0];
+      //simp = e[1].split(" ")[1];
+      trad = simp = e[1];
+      //pinyin = this.parsePinyin(e[2]);
+      pinyin = e[2];
+
       def = e[3];
 
       //HANZI
@@ -204,29 +676,31 @@ ppcDict.prototype = {
         second = newsecond.join('');
 
         if (ppcMain.config.docolors == "yes") {
-          for( j = 0; j < pinyin.tones.length; j++)
-            k += '<span class="w-hanzi' + pinyin.tones[j] + '">' + first[j] + '</span>';
-          k += '　';
-          for( j = 0; j < pinyin.tones.length; j++)
-            k += '<span class="w-hanzi' + pinyin.tones[j] + '">' + second[j] + '</span>';
+          //for( j = 0; j < pinyin.tones.length; j++)
+          //  k += '<span class="w-hanzi' + pinyin.tones[j] + '">' + first[j] + '</span>';
+          //k += '　';
+          //for( j = 0; j < pinyin.tones.length; j++)
+          //  k += '<span class="w-hanzi' + pinyin.tones[j] + '">' + second[j] + '</span>';
+          k += '<span class="w-hanzi3">' + first + '</span>　<span class="w-hanzi3">'　+ second + '</span>';
         }
         else
           k += '<span class="w-hanzi3">' + first + '</span>　<span class="w-hanzi3">'　+ second + '</span>';
-      }
-      else {
+      } else {
         var hanzi = ppcMain.config.showhanzi == "simp" ? simp : trad;
-        if (ppcMain.config.docolors == "yes")
-          for( j = 0; j < pinyin.tones.length; j++)
-            k += '<span class="w-hanzi' + pinyin.tones[j] + '">' + hanzi[j] + '</span>';
-        else
+        if (ppcMain.config.docolors == "yes") {
+          //for( j = 0; j < pinyin.tones.length; j++)
+          //  k += '<span class="w-hanzi' + pinyin.tones[j] + '">' + hanzi[j] + '</span>';
+          k += '<span class="w-hanzi3">' + hanzi + '</span>';
+        } else
           k += '<span class="w-hanzi3">' + hanzi + '</span>';
       }
 
       //PINYIN
       k += '&#32;&#32; <span class="w-kana">';
-      if      ("tonenums" == ppcMain.config.pinyin) k += pinyin.tonenums  + '</span>';
-      else if ("zhuyin"   == ppcMain.config.pinyin) k += pinyin.zhuyin    + '</span>';
-      else                       k += pinyin.tonemarks + '</span>';
+      //if      ("tonenums" == ppcMain.config.pinyin) k += pinyin.tonenums  + '</span>';
+      //else if ("zhuyin"   == ppcMain.config.pinyin) k += pinyin.zhuyin    + '</span>';
+      //else                       k += pinyin.tonemarks + '</span>';
+      k += pinyin + '</span>';
 
       b.push(k);
 

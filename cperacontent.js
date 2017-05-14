@@ -528,10 +528,11 @@ var ppcContent = {
     //selection end data
     var selEndList = [];
     var text = this.getTextFromRange(rp, ro, selEndList, 13 /*maxlength*/);
+    console.log(text);
 
     lastSelEnd = selEndList;
     lastRo = ro;
-    browser.runtime.sendMessage({"type":"xsearch", "text":text, "showmode":this.showMode},
+    browser.runtime.sendMessage({"type":"jsearch", "text":text, "showmode":this.showMode},
     ppcContent.processEntry);
 
     return 1;
@@ -539,9 +540,17 @@ var ppcContent = {
   },
 
   inLanguageRange: function (u) {
-    if ((u >= 0x4E00) && (u <= 0x9FFF))
-      return true;
-    return false;
+    if (((u != 0x25CB) &&
+			((u < 0x3001) || (u > 0x30FF)) &&
+			((u < 0x3400) || (u > 0x9FFF)) &&
+			((u < 0xF900) || (u > 0xFAFF)) &&
+			((u < 0xFF10) || (u > 0xFF9D))))
+      return false;
+
+    return true;
+    //if ((u >= 0x4E00) && (u <= 0x9FFF))
+    //  return true;
+    //return false;
   },
 
   processEntry: function(e) {
